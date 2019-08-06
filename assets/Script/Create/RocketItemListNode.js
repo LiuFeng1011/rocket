@@ -47,9 +47,10 @@ cc.Class({
     },
 
     TouchStartEvent(event){
-
+        var _event = new cc.Event.EventCustom('selectUnit', true) ;
+        _event.setUserData(this.unitconfig);
         cc.log("touch unit : " + JSON.stringify(this.unitconfig));
-
+        this.node.dispatchEvent(_event);
     },
     // update (dt) {},
 });

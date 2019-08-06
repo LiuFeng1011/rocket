@@ -13,7 +13,6 @@ cc.Class({
 
     init () {
 
-        this.addLayer("buildLayer",0);
         this.addLayer("createLayer",0);
 
     },
