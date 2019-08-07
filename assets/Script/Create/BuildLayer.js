@@ -3,10 +3,10 @@ cc.Class({
 
     properties: {
         graphics : { default: null, visible:false },
-        lastPos : { default: null, visible:false },
-        moveWidth : { default: 0, visible:false },
-        moveHeight : { default: 0, visible:false },
-
+        // lastPos : { default: null, visible:false },
+        // moveWidth : { default: 0, visible:false },
+        // moveHeight : { default: 0, visible:false },
+        movePos : { default: new cc.Vec2(0.0, 0.0), visible:false },
         //界面移动超出边界的范围
         border : { default: 200, visible:false },
 
@@ -15,6 +15,10 @@ cc.Class({
 
         //部件列表
         unitListNode : { default: null, visible:false },
+
+        //记录触摸点的数量 用于放大缩小场景
+        touchList : { default: null, visible:false },
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -22,7 +26,9 @@ cc.Class({
     // onLoad () {},
 
     start () {
+        this.touchList = [];
         this.graphics = this.node.getComponent(cc.Graphics);
+
         this.unitListNode =  new cc.Node('unitListNode');
         this.unitListNode.parent = this.node;
         cc.log("init build layer");
@@ -67,31 +73,19 @@ cc.Class({
     //移动操作
     refrestLayerPos(){
         //设置layer坐标
-        this.node.x =  this.node.x + this.moveWidth;
-        this.node.y =  this.node.y + this.moveHeight;
-        this.moveWidth = 0;
-        this.moveHeight = 0;
+        this.node.setPosition(this.node.getPosition().add(this.movePos));
+        this.movePos.subSelf(this.movePos);
 
         //边界控制
-        var _maxx = this.node.width * this.node.scale / 2 - this.node.parent.width / 2 + this.border
+        var _maxx = this.node.width * this.node.scale / 2 - this.node.parent.width / 2 + this.border;
         if(_maxx > 0){
-            if (this.node.x > _maxx){
-                this.node.x = _maxx
-            }
-            else if (this.node.x < -_maxx){
-                this.node.x = -_maxx
-            }
+            this.node.x = GameCommon.getNum(this.node.x,0,-_maxx,_maxx);
         }
         
-        var _maxy = this.node.height * this.node.scale / 2 - this.node.parent.height / 2 + this.border
+        var _maxy = this.node.height * this.node.scale / 2 - this.node.parent.height / 2 + this.border;
         
         if(_maxy > 0){
-            if (this.node.y > _maxy){
-                this.node.y = _maxy
-            }
-            else if (this.node.y < -_maxy){
-                this.node.y = -_maxy
-            }
+            this.node.y = GameCommon.getNum(this.node.y,0,-_maxy,_maxy);
         }
 
 
@@ -99,16 +93,23 @@ cc.Class({
         this.drawLine();
     },
 
-    refreshSelecetUnitPos(){
-        if(Math.abs(this.moveWidth) > 60){
-            this.selectUnitNode.x = this.selectUnitNode.x + this.moveWidth - (this.moveWidth % GameDefine.BUILD_UNIT_SIZE);
-            this.moveWidth = this.moveWidth % GameDefine.BUILD_UNIT_SIZE;
-        }
-        if(Math.abs(this.moveHeight) > 60){
-            this.selectUnitNode.y = this.selectUnitNode.y + this.moveHeight - (this.moveHeight % GameDefine.BUILD_UNIT_SIZE);
-            this.moveHeight = this.moveHeight % GameDefine.BUILD_UNIT_SIZE;
-        }
-        cc.log("x:"+this.selectUnitNode.x+"  y:"+this.selectUnitNode.y);
+    refreshSelecetUnitPos(eventpos){
+
+        var worldpos = eventpos ;//eventpos.add(new cc.Vec2(this.node.parent.width / 2,this.node.parent.height / 2));
+        var layerpos = this.node.convertToNodeSpaceAR(worldpos);
+
+        this.selectUnitNode.x = layerpos.x - layerpos.x % GameDefine.BUILD_UNIT_SIZE;
+        this.selectUnitNode.y = layerpos.y - layerpos.y % GameDefine.BUILD_UNIT_SIZE;
+
+        // if(Math.abs(this.movePos.x) > 60){
+        //     this.selectUnitNode.x = this.selectUnitNode.x + this.movePos.x - (this.movePos.x % GameDefine.BUILD_UNIT_SIZE);
+        //     this.movePos.x = this.movePos.x % GameDefine.BUILD_UNIT_SIZE;
+        // }
+        // if(Math.abs(this.movePos.y) > 60){
+        //     this.selectUnitNode.y = this.selectUnitNode.y + this.movePos.y - (this.movePos.y % GameDefine.BUILD_UNIT_SIZE);
+        //     this.movePos.y = this.movePos.y % GameDefine.BUILD_UNIT_SIZE;
+        // }
+        
     },
 
     createUnit(config,posx,posy){
@@ -143,15 +144,31 @@ cc.Class({
         this.lastPos = event.getLocation();
     },
     TouchMoveEvent(event){
-        this.moveWidth = this.moveWidth + (event.getLocation().x - this.lastPos.x);
-        this.moveHeight = this.moveHeight + (event.getLocation().y - this.lastPos.y);
-        this.lastPos = event.getLocation();
+        // this.moveWidth = this.moveWidth + (event.getLocation().x - this.lastPos.x);
+        // this.moveHeight = this.moveHeight + (event.getLocation().y - this.lastPos.y);
+        // this.lastPos = event.getLocation();
         if(this.selectUnitNode != null){
+            // this.movePos.addSelf(event.getDelta().mul(2.0-this.node.scale));
+
             //移动选中的部件
-            this.refreshSelecetUnitPos();
+            this.refreshSelecetUnitPos(event.getLocation());
         }else{
-            //移动界面
-            this.refrestLayerPos();
+            this.movePos.addSelf(event.getDelta());
+            //缩放
+            if(event.getTouches().length > 1){
+                var lastdistance = event.getTouches()[0].getPreviousLocation().sub(event.getTouches()[1].getPreviousLocation()).mag();
+                var thisdistance = event.getTouches()[0].getLocation().sub(event.getTouches()[1].getLocation()).mag();
+                var dis = thisdistance - lastdistance;
+
+                var scaledis = dis / 1080;
+
+                this.node.scale = GameCommon.getNum(this.node.scale,scaledis,0.5,1.5);
+                cc.log("set build layer scale : " + this.node.scale);
+
+            }else{
+                //移动界面
+                this.refrestLayerPos();
+            }
         }
 
     },

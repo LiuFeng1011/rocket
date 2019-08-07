@@ -1,5 +1,17 @@
 
 window.GameCommon={
+
+    //给变量赋值
+    getNum(source,value,min,max){
+        source = source + value;
+        if(source < min){
+            source = min;
+        }else if(source > max){
+            source = max;
+        }
+        return source;
+    },
+
     //判断是否同一天
     isCurrentDay:function (_time)
     {
