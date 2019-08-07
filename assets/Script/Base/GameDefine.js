@@ -55,4 +55,18 @@ window.GameDefine={
         "效用"
     ],
 
+    CREATE_CTRL_BTN_TYPE : cc.Enum({
+        start:0,// 0.开始
+        save:1,// 1.保存
+        load:2,// 2.负载
+        clear:3,// 3.清除
+        exit:4,// 4.退出
+    }),
+    CREATE_CTRL_BTN_NAME : [
+        "开始",
+        "保存",
+        "负载",
+        "清除",
+        "退出",
+    ],
 }

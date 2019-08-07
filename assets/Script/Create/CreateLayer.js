@@ -6,8 +6,14 @@ cc.Class({
     properties: {
         contentNode : { default:null, type:cc.Node },
         itemPrefab : { default: null, type: cc.Prefab, },
+
+        //两侧按钮列表
         leftMenuBtnListNode : { default: null, type: cc.Node, },
+        rightMenuBtnListNode : { default: null, type: cc.Node, },
+
+        //按钮预制体
         leftMenuBtnPrefab : { default: null, type: cc.Prefab, },
+        rightMenuBtnPrefab : { default: null, type: cc.Prefab, },
 
         //绘制组件
         graphics : { default: null, visible:false },
@@ -20,7 +26,7 @@ cc.Class({
         //当前按钮列表的类型
         unitListType:{ default:"", visible:false },
 
-        //
+        //组装层
         buildlayer : { default: null, visible:false },
     },
 
@@ -54,7 +60,7 @@ cc.Class({
         this.loadUnitItem(1);
 
         this.leftMenuBtnListNode.active = false;
-        //生成类型按钮
+        //生成左侧类型按钮列表 配置表中的类型是从1开始
         for(var i = 1 ; i < GameDefine.ROCKET_UNIT_TYPE_NAME.length ; i ++){
             var node = cc.instantiate(this.leftMenuBtnPrefab);
             this.leftMenuBtnListNode.addChild(node);
@@ -66,12 +72,28 @@ cc.Class({
             node.on ('click',this.leftMenuBtnsCB,this);
         }
 
+
+        this.rightMenuBtnListNode.active = false;
+        //生成右侧按钮列表
+        for(var i = 0 ; i < GameDefine.CREATE_CTRL_BTN_NAME.length ; i ++){
+            var node = cc.instantiate(this.rightMenuBtnPrefab );
+            this.rightMenuBtnListNode.addChild(node);
+            var label = node.getChildByName("label").getComponent(cc.Label);
+            label.string = GameDefine.CREATE_CTRL_BTN_NAME[i];
+            node.name = ""+i;
+
+            //添加按钮回调
+            node.on ('click',this.rightMenuBtnsCB,this);
+        }
+
         this.buildlayer = this.node.getChildByName("buildLayer").getComponent("BuildLayer");
 
         //添加按钮回调
         var leftMenuBtn = this.node.getChildByName("BtnMenuleft");
         leftMenuBtn.on ('click',this.leftMenuBtnCB,this);
 
+        var rightMenuBtn = this.node.getChildByName("BtnMenuRight");
+        rightMenuBtn.on ('click',this.rightMenuBtnCB,this);
     },
 
     selectUnit(target,config){
@@ -106,15 +128,40 @@ cc.Class({
 
     leftMenuBtnsCB(button){
         var type = button.node.name;
-        cc.log("cleck button : " + type);
+        
         this.loadUnitItem(type);
+        this.leftMenuBtnCB(null);
     },
+    rightMenuBtnsCB(button){
+        var type = button.node.name;
+        switch(parseInt(type)){
+            
+            case GameDefine.CREATE_CTRL_BTN_TYPE.start  :
+                cc.log("click start btn");
+                break;
+            case GameDefine.CREATE_CTRL_BTN_TYPE.save  :
+                    cc.log("click save btn");
+                break;
+            case GameDefine.CREATE_CTRL_BTN_TYPE.load  :
+                    cc.log("click load btn");
+                break;
+            case GameDefine.CREATE_CTRL_BTN_TYPE.clear  :
+                    this.buildlayer.clearUnitList();
+                break;
+            case GameDefine.CREATE_CTRL_BTN_TYPE.exit  :
+                    cc.log("click exit btn");
+                break;
 
+        }
+        
+        this.rightMenuBtnCB(null);
+    },
     leftMenuBtnCB(button){
-        cc.log("cleck button leftMenuBtn " );
         this.leftMenuBtnListNode.active = !this.leftMenuBtnListNode.active ;
     },
-
+    rightMenuBtnCB(button){
+        this.rightMenuBtnListNode.active = !this.rightMenuBtnListNode.active ;
+    },
     TouchStartEvent(event){
         this.buildlayer.TouchStartEvent(event);
     },

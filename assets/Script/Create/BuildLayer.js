@@ -16,9 +16,6 @@ cc.Class({
         //部件列表
         unitListNode : { default: null, visible:false },
 
-        //记录触摸点的数量 用于放大缩小场景
-        touchList : { default: null, visible:false },
-
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,7 +23,6 @@ cc.Class({
     // onLoad () {},
 
     start () {
-        this.touchList = [];
         this.graphics = this.node.getComponent(cc.Graphics);
 
         this.unitListNode =  new cc.Node('unitListNode');
@@ -95,21 +91,30 @@ cc.Class({
 
     refreshSelecetUnitPos(eventpos){
 
-        var worldpos = eventpos ;//eventpos.add(new cc.Vec2(this.node.parent.width / 2,this.node.parent.height / 2));
-        var layerpos = this.node.convertToNodeSpaceAR(worldpos);
-
-        this.selectUnitNode.x = layerpos.x - layerpos.x % GameDefine.BUILD_UNIT_SIZE;
-        this.selectUnitNode.y = layerpos.y - layerpos.y % GameDefine.BUILD_UNIT_SIZE;
-
-        // if(Math.abs(this.movePos.x) > 60){
-        //     this.selectUnitNode.x = this.selectUnitNode.x + this.movePos.x - (this.movePos.x % GameDefine.BUILD_UNIT_SIZE);
-        //     this.movePos.x = this.movePos.x % GameDefine.BUILD_UNIT_SIZE;
-        // }
-        // if(Math.abs(this.movePos.y) > 60){
-        //     this.selectUnitNode.y = this.selectUnitNode.y + this.movePos.y - (this.movePos.y % GameDefine.BUILD_UNIT_SIZE);
-        //     this.movePos.y = this.movePos.y % GameDefine.BUILD_UNIT_SIZE;
-        // }
-        
+        if(false){
+            //跟随触点移动
+            var worldpos = eventpos ;//eventpos.add(new cc.Vec2(this.node.parent.width / 2,this.node.parent.height / 2));
+            var layerpos = this.node.convertToNodeSpaceAR(worldpos);
+    
+            this.selectUnitNode.x = layerpos.x - layerpos.x % GameDefine.BUILD_UNIT_SIZE;
+            this.selectUnitNode.y = layerpos.y - layerpos.y % GameDefine.BUILD_UNIT_SIZE;
+    
+        }else{
+            //坐标增量移动
+            if(Math.abs(this.movePos.x) > 60){
+                this.selectUnitNode.x = this.selectUnitNode.x + this.movePos.x - (this.movePos.x % GameDefine.BUILD_UNIT_SIZE);
+                this.movePos.x = this.movePos.x % GameDefine.BUILD_UNIT_SIZE;
+            }
+            if(Math.abs(this.movePos.y) > 60){
+                this.selectUnitNode.y = this.selectUnitNode.y + this.movePos.y - (this.movePos.y % GameDefine.BUILD_UNIT_SIZE);
+                this.movePos.y = this.movePos.y % GameDefine.BUILD_UNIT_SIZE;
+            }
+        }
+    },
+    //清除所有对象
+    clearUnitList(){
+        this.unitListNode.removeAllChildren();
+        this.selectUnitNode = null;
     },
 
     createUnit(config,posx,posy){
@@ -120,8 +125,7 @@ cc.Class({
         var self = this;
         cc.loader.loadRes("Prefabs/RocketUnit/"+config[GameDefine.ROCKET_UNIT_CONFIG_FIELDS.resname], function (err, prefab) {
             var node = cc.instantiate(prefab);
-            // self.unitListNode.addChild(node);
-            self.node.addChild(node);
+            self.unitListNode.addChild(node);
             node.x = posx - posx % GameDefine.BUILD_UNIT_SIZE;
             node.y = posy - posy % GameDefine.BUILD_UNIT_SIZE;
             if(movetarget){
@@ -148,7 +152,7 @@ cc.Class({
         // this.moveHeight = this.moveHeight + (event.getLocation().y - this.lastPos.y);
         // this.lastPos = event.getLocation();
         if(this.selectUnitNode != null){
-            // this.movePos.addSelf(event.getDelta().mul(2.0-this.node.scale));
+            this.movePos.addSelf(event.getDelta().mul(2.0-this.node.scale));
 
             //移动选中的部件
             this.refreshSelecetUnitPos(event.getLocation());
@@ -163,7 +167,6 @@ cc.Class({
                 var scaledis = dis / 1080;
 
                 this.node.scale = GameCommon.getNum(this.node.scale,scaledis,0.5,1.5);
-                cc.log("set build layer scale : " + this.node.scale);
 
             }else{
                 //移动界面
