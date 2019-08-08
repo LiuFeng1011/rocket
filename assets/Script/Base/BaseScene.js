@@ -109,11 +109,13 @@ var BaseScene = cc.Class({
             cc.log("no layer to delete!!");
             return;
         }
-        if(layer.layerid == this.layerList[this.layerList.length -1].layerid){
-            this.layerList[this.layerList.length -1]._close();
-            this.layerList.pop();
-        }else{
-            cc.log("layerid error "+layer.layerid+"/"+this.layerList[this.layerList.length -1].layerid);
+
+        for (var i = 0 ; i < this.layerList.length; i ++){
+            if(layer.layerid == this.layerList[i].layerid){
+                this.layerList[i]._close();
+                this.layerList.splice(i,1);
+                return;
+            }
         }
 
     },

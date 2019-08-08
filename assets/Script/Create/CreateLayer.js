@@ -140,7 +140,7 @@ cc.Class({
                 cc.log("click start btn");
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.save  :
-                    cc.log("click save btn");
+                    this.scene.addLayer("createSaveLayer",this);
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.load  :
                     cc.log("click load btn");
@@ -156,6 +156,35 @@ cc.Class({
         
         this.rightMenuBtnCB(null);
     },
+
+    //保存火箭数据
+    saveRocketData(name){
+        var rocketData = GameLocalData._rocketsListData.getNewRocket(name);
+        var unitListNode = this.buildlayer.unitListNode;
+        for (var i = 0 ; i < unitListNode.childrenCount ; i ++){
+            var rocketItemListNode = unitListNode.children[i].getComponent("RocketUnit");
+            if (rocketItemListNode == null){
+                cc.log("this unit list hase a other object : " + unitListNode.children[i].name);
+                continue;
+            }
+            rocketData.addUnit(
+                unitListNode.children[i].x,
+                unitListNode.children[i].y,
+                parseInt(rocketItemListNode.config[GameDefine.ROCKET_UNIT_CONFIG_FIELDS.id]));
+        }
+
+        GameLocalData._rocketsListData.addRocket(rocketData);
+        GameLocalData.SaveData(GameLocalData._rocketsListData);
+
+
+        this.scene.addLayer("alertLayer","保存成功:"+name);
+    },
+
+    //加载火箭
+    reLoadRocket(name){
+        
+    },
+
     leftMenuBtnCB(button){
         this.leftMenuBtnListNode.active = !this.leftMenuBtnListNode.active ;
     },

@@ -1,3 +1,5 @@
+var RocketUnit = require("../Common/RocketUnit");
+
 cc.Class({
     extends: cc.Component,
 
@@ -125,6 +127,10 @@ cc.Class({
         var self = this;
         cc.loader.loadRes("Prefabs/RocketUnit/"+config[GameDefine.ROCKET_UNIT_CONFIG_FIELDS.resname], function (err, prefab) {
             var node = cc.instantiate(prefab);
+
+            var _ru = node.addComponent(RocketUnit);
+            _ru.config = config;
+
             self.unitListNode.addChild(node);
             node.x = posx - posx % GameDefine.BUILD_UNIT_SIZE;
             node.y = posy - posy % GameDefine.BUILD_UNIT_SIZE;

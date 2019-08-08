@@ -15,11 +15,44 @@ function SetingData () {
     this.name = "_setingData";
 }
 
+function RocketData (skey){
+    this.unitList = [];
+    this.skey = skey;
+    this.minHeight = 0;
+    this.stamp = GameCommon.getCurrentTime();
+    this.addUnit = function(x,y,configid){
+        var _data = {};
+        _data.x = x;
+        _data.y = y;
+        _data.configid = configid;
+        if (this.minHeight > y ){
+            this.minHeight = y;
+        }
+        this.unitList.push(_data);
+    };
+}
+
+function RocketsListData(){
+    this.rocketsList = {};
+    this.addRocket = function(data){
+        this.rocketsList[data.skey] = data;
+        
+    };
+    this.getNewRocket = function(name){
+        return new RocketData(name);
+    };
+
+    this.name = "_rocketsListData";
+}
+
+
 var LocalDataManager={
-    _setingData:new SetingData(),
+    _setingData:new SetingData(),//玩家设置数据
+    _rocketsListData:new RocketsListData(),//玩家的全部火箭数据
 
     Init(){
         this.LoadData(this._setingData.name);
+        this.LoadData(this._rocketsListData.name);
     },
 
     //加载数据
@@ -27,7 +60,7 @@ var LocalDataManager={
         var data =  LocalData.GetLocalData(name);
         if(data != null)//设置信息
         {
-            this[name] = data;
+            Object.assign(this[name],data);
         }
     },
 

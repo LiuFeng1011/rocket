@@ -26,7 +26,7 @@ var BaseLayer = cc.Class({
     // onLoad () {},
 
     init (params) {
-        cc.log("baselayer start : " + this.layerid + " params : " + JSON.stringify(params));
+        cc.log("baselayer start : " + this.layerid );
         var closeBtnNode = this.node.getChildByName('BackButton');
         if (closeBtnNode != null){
             closeBtnNode.on ('click',this.callback_back,this);
