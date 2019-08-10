@@ -144,6 +144,17 @@ cc.Class({
         });
     },
 
+    loadRocket(skey){
+        this.clearUnitList();
+        var rocketdata = GameLocalData._rocketsListData.rocketsList[skey];
+
+        for(var i = 0 ; i < rocketdata.unitList.length ; i ++){
+            var unitdata = rocketdata.unitList[i];
+            this.addUnit(GAME_CONFIG_DATA.RocketUnitConfig[unitdata.configid],unitdata.x,unitdata.y,false);
+        }
+
+    },
+
     unitTouchCB(event){
         cc.log("unitTouchCB : " + event.target.name);
         this.selectUnitNode = event.target ;

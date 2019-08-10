@@ -143,13 +143,13 @@ cc.Class({
                     this.scene.addLayer("createSaveLayer",this);
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.load  :
-                    cc.log("click load btn");
+                this.scene.addLayer("createLoadLayer",this);
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.clear  :
                     this.buildlayer.clearUnitList();
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.exit  :
-                    cc.log("click exit btn");
+                this.scene.changeScene("logo");
                 break;
 
         }
@@ -182,7 +182,8 @@ cc.Class({
 
     //加载火箭
     reLoadRocket(name){
-        
+        this.buildlayer.loadRocket(name);
+
     },
 
     leftMenuBtnCB(button){

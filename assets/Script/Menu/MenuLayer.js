@@ -12,6 +12,7 @@ cc.Class({
         button_guide:{ default:null, type:cc.Button },
         button_seting:{ default:null, type:cc.Button },
         button_exit:{ default:null, type:cc.Button },
+        button_clear:{ default:null, type:cc.Button },
 
     },
 
@@ -28,6 +29,7 @@ cc.Class({
         this.button_guide.node.on       ('click',this.callback_guide,this);
         this.button_seting.node.on      ('click',this.callback_seting,this);
         this.button_exit.node.on        ('click',this.callback_exit,this);
+        this.button_clear.node.on        ('click',this.callback_clear,this);
 
     },
 
@@ -81,6 +83,15 @@ cc.Class({
     {
         var  des = button.node.name;
         cc.log(des);
+        
+    },
+    callback_clear:function(button)
+    {
+        var  des = button.node.name;
+        cc.log(des);
+
+        GameLocalData._rocketsListData.rocketsList = {};
+        GameLocalData.SaveData(GameLocalData._rocketsListData);
         
     },
 });
