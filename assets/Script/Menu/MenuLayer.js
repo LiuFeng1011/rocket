@@ -61,6 +61,7 @@ cc.Class({
         var  des = button.node.name;
         cc.log(des);
         
+        this.scene.changeScene("game");
     },
 
     callback_guide:function(button)

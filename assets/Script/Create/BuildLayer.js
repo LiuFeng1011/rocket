@@ -162,7 +162,7 @@ cc.Class({
 
     // update (dt) {},
     TouchStartEvent(event){
-        this.lastPos = event.getLocation();
+        //this.lastPos = event.getLocation();
     },
     TouchMoveEvent(event){
         // this.moveWidth = this.moveWidth + (event.getLocation().x - this.lastPos.x);

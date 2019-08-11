@@ -11,8 +11,9 @@ cc.Class({
 
     // onLoad () {},
 
-    start () {
+    init () {
 
+        this.addLayer("gameLayer",0);
     },
 
     // update (dt) {},

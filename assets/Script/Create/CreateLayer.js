@@ -137,7 +137,7 @@ cc.Class({
         switch(parseInt(type)){
             
             case GameDefine.CREATE_CTRL_BTN_TYPE.start  :
-                cc.log("click start btn");
+                this.scene.changeScene("game");
                 break;
             case GameDefine.CREATE_CTRL_BTN_TYPE.save  :
                     this.scene.addLayer("createSaveLayer",this);
