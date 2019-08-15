@@ -9,6 +9,8 @@ cc.Class({
         planetNodeList : { default: null, type: cc.Node, },
         planetNameLabelList : { default: null, type: cc.Node, },
         planetNameLabelPrefab : { default: null, type: cc.Prefab, },
+        planetList : {default: {},visible:false},
+        groundPrefab : { default: null, type: cc.Prefab, },
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -44,18 +46,40 @@ cc.Class({
 
             node.angle = this.getPlanetRotation(i);
 
+            this.planetList[GameDefine.planetData[i].type] = planetNode;
+
             var node = cc.instantiate(this.planetNameLabelPrefab);
             this.planetNameLabelList.addChild(node);
             var namelabel = node.getComponent(cc.Label);
             namelabel.string = GameDefine.planetData[i].type;
         }
-        this.planetNodeList.scale = 0.013;
         // this.updatePlanetNameLabel(0);
+
+        //初始化 界面缩放比例
+        this.planetNodeList.scale = 50000;//GameDefine.GAME_SCENE_MAX_SCALE;
+
+        //初始化位置
+        var earthnode = this.getPlanetNode("earth");
+        //var earthcenterpos = earthnode.parent.convertToWorldSpaceAR(earthnode.getPosition().add(cc.v2(0,GameDefine.planetData[3].r)));
+        var earthcenterpos = earthnode.parent.convertToWorldSpaceAR(earthnode.getPosition());
+        earthcenterpos = earthcenterpos.add(cc.v2(0,GameDefine.planetData[3].r * this.planetNodeList.scale));
+        this.planetNodeList.setPosition(cc.v2(0,0).sub(this.node.convertToNodeSpaceAR(earthcenterpos)));
+
+        //创建发台
+        // var groundnode = cc.instantiate(this.groundPrefab);
+        // this.planetNodeList.addChild(node);
+        // groundnode.setPosition(this.node.convertToNodeSpaceAR(earthcenterpos));
+
     },
     update (dt) {
 
         this.updatePlanetNameLabel(dt);
     },
+
+    getPlanetNode(name){
+        return this.planetList[name];
+    },
+
     //实时刷新名字位置
     updatePlanetNameLabel(dt){
         this.graphics.clear ();
@@ -67,6 +91,8 @@ cc.Class({
 
             var worldpos = node.parent.convertToWorldSpaceAR(node.getPosition());
             var layerpos = this.planetNameLabelList.convertToNodeSpaceAR(worldpos);
+
+            //设置姓名名字标签的位置
             label.position  = layerpos;
 
             //行星距离屏幕中心点的距离
@@ -77,12 +103,10 @@ cc.Class({
                 var r = GameDefine.planetData[i].r * this.planetNodeList.scale;
                 if(r > 2){
                     this.planetGraphics.circle( layerpos.x, layerpos.y, r);
-                    cc.log("r :  " + r);
                     continue;
                 }
                 
             } 
-            
             //计算需要绘制的行星路径的半径
             var r  = layerpos.subSelf(this.planetNodeList.position).mag();
             if (r < 10 ){
@@ -136,7 +160,7 @@ cc.Class({
 
             
             var lastpos = this.planetNodeList.convertToNodeSpaceAR(cc.v2(this.node.width / 2,this.node.height / 2));
-            this.planetNodeList.scale = GameCommon.getNum(this.planetNodeList.scale,scaledis * symbol,0.01,100000);
+            this.planetNodeList.scale = GameCommon.getNum(this.planetNodeList.scale,scaledis * symbol,0.01,GameDefine.GAME_SCENE_MAX_SCALE);
 
             var worldpos = this.planetNodeList.convertToWorldSpaceAR(lastpos).sub(cc.v2(this.node.width / 2,this.node.height / 2));
             //this.planetNodeList.setPosition(this.planetNodeList.getPosition().add(this.planetNodeList.getPosition().scale(cc.v2(scaledis* symbol, scaledis* symbol))));

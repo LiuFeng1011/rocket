@@ -4,12 +4,14 @@ cc.Class({
     extends: BaseScene,
 
     properties: {
-        
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this._super();
+        cc.director.getPhysicsManager().enabled = true;
+    },
 
     init () {
 

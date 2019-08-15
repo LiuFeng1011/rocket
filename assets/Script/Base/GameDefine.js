@@ -3,9 +3,15 @@ window.GameDefine={
     GAME_VERSION:"0.0.1",
     GAME_NAME:"Rocket",
 
+    //编辑界面每个单位的尺寸
     BUILD_UNIT_SIZE : 60,
+
+    //编辑界面大小 需要乘以单位尺寸
     BULID_LAYER_WIDTH : [30,60],
     BULID_LAYER_HEIGHT : [80,160],
+
+    //游戏中地图最大的放大尺寸
+    GAME_SCENE_MAX_SCALE : 100000,
 
     LAYER_ACTION_TYPE : cc.Enum({
         DEFAULT : 0,

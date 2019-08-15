@@ -12,7 +12,6 @@ cc.Class({
     // onLoad () {},
 
     init () {
-
         this.addLayer("createLayer",0);
 
     },
