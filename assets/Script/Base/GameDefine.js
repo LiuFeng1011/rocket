@@ -11,7 +11,7 @@ window.GameDefine={
     BULID_LAYER_HEIGHT : [80,160],
 
     //游戏中地图最大的放大尺寸
-    GAME_SCENE_MAX_SCALE : 100000,
+    GAME_SCENE_MAX_SCALE : 4000,
 
     LAYER_ACTION_TYPE : cc.Enum({
         DEFAULT : 0,
@@ -82,48 +82,48 @@ window.GameDefine={
         {
 			type:"sun",
             pr:1, //距离太阳距离 km
-            r:69.55,//星球半径 km
+            r:6955,//星球半径 km
             cycle:7577280,//公转周期 87.70d s
 		},
         {
 			type:"mercury",
-            pr:5791, //距离太阳距离 km
-            r:0.4880,//星球半径 km
+            pr:579100, //距离太阳距离 km
+            r:48.80,//星球半径 km
             cycle:7577280,//公转周期 87.70d s
 		},{
 			type:"Venus",
-			pr:10820,
-            r:1.21036,
+			pr:1082000,
+            r:121.036,
             cycle:19414166,//公转周期 224.701d s
 		},{
 			type:"earth",
-			pr:14960,
-            r:1.27563,
+			pr:1496000,
+            r:127.563,
             cycle:31556926,//公转周期 365.2422d s
 		},{
 			type:"Mars",
-			pr:22794,
-            r:0.6794,
+			pr:2279400,
+            r:67.94,
             cycle:59355072,//公转周期 686.98d s
 		},{
 			type:"Jupiter",
-			pr:77833,
-            r:14.2984,
+			pr:7783300,
+            r:1429.84,
             cycle:374335689,//公转周期 s
 		},{
 			type:"Saturn",
-			pr:142940,
-            r:12.0536,
+			pr:14294000,
+            r:1205.36,
             cycle:935913052,//公转周期 s
 		},{
 			type:"Uranus",
-			pr:287099,
-            r:5.1118,
+			pr:28709900,
+            r:511.18,
             cycle:2661041808,//公转周期 s
 		},{
 			type:"Neptune",
-			pr:450400,
-            r:4.9532,
+			pr:45040000,
+            r:495.32,
             cycle:5212306713,//公转周期 s
 		}],
 }

@@ -53,8 +53,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 1080,
+      "height": 1920
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -153,7 +153,11 @@
       "__id__": 2
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "6f801092-0c37-4f30-89ef-c8d960825b36"
+      }
+    ],
     "_lineWidth": 1,
     "_strokeColor": {
       "__type__": "cc.Color",
@@ -381,6 +385,11 @@
     "planetNameLabelPrefab": {
       "__uuid__": "555de64e-5130-47b9-8711-9b43e3946699"
     },
+    "planetList": {},
+    "groundPrefab": {
+      "__uuid__": "f5baffcc-776b-42cc-9d71-5dc505e9c093"
+    },
+    "lockPlanet": null,
     "_id": ""
   },
   {

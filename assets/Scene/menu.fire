@@ -242,6 +242,9 @@
     "layerInstanceID": 0,
     "layerList": [],
     "layersNode": null,
+    "state": 0,
+    "canvas": null,
+    "locastate": false,
     "_id": "16r3eyEmNDZIFMp7iHYol+"
   }
 ]
