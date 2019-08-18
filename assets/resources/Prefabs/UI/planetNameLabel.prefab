@@ -30,8 +30,8 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
+      "r": 0,
+      "g": 102,
       "b": 255,
       "a": 255
     },
@@ -107,7 +107,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "555de64e-5130-47b9-8711-9b43e3946699"
     },
     "fileId": "369jygN8JLgZQv+3BXWuPw",
     "sync": false

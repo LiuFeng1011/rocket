@@ -70,7 +70,7 @@ cc.Class({
             this.planetList[GameDefine.planetData[i].type] = planet;
         }
         //初始化 界面缩放比例
-        this.planetNodeList.scale = GameDefine.GAME_SCENE_MAX_SCALE;
+        this.planetNodeList.scale = 100;//GameDefine.GAME_SCENE_MAX_SCALE;
 
         this.updatePlanetData(0);
 
@@ -80,10 +80,10 @@ cc.Class({
         this.planetNodeList.setPosition(cc.v2(-_pos.x * this.planetNodeList.scale,-_pos.y * this.planetNodeList.scale));
         
         //创建发台
-        var groundnode = cc.instantiate(this.groundPrefab);
-        earthnode.addChild(groundnode);
-        groundnode.setPosition(cc.v2(0,this.planetList["earth"].data.r));
-        groundnode.scale = 0.01;
+        // var groundnode = cc.instantiate(this.groundPrefab);
+        // earthnode.addChild(groundnode);
+        // groundnode.setPosition(cc.v2(0,this.planetList["earth"].data.r));
+        // groundnode.scale = 0.01;
 
     },
     update (dt) {
@@ -128,28 +128,28 @@ cc.Class({
             // var node = this.planetNodeList.children[i].children[0];
             //更新星球位置
             var node = planet.node;
-            var r = this.getPlanetRotation(planet.data);
+            //计算移动之前的坐标
             var lastpos = node.convertToNodeSpaceAR(cc.v2(this.scene.canvas.node.width / 2,this.scene.canvas.node.height / 2));
-            
-            //计算x，y坐标
-            var x = Math.sin(r / 180 * Math.PI ) * planet.data.pr;
-            var y = Math.cos(r / 180 * Math.PI ) * planet.data.pr;
-            node.x = x;
-            node.y = y;
 
             var worldpos = node.parent.convertToWorldSpaceAR(node.getPosition());
             var layerpos = this.planetNameLabelList.convertToNodeSpaceAR(worldpos);
             
             //行星距离屏幕中心点的距离
             var _dis = layerpos.mag();
-            if(_dis - planet.data.r * this.planetNodeList.scale  < 1000){
-                var r = planet.data.r * this.planetNodeList.scale;
-                if(r > 40){
+            if(_dis - planet.data.r * this.planetNodeList.scale  < 2000){
+                var drawr = planet.data.r * this.planetNodeList.scale;
+                if(drawr > 40){
                     this.setLockNode(lastpos,node);
-                    continue;
                 }
-                
             }
+
+            var r = this.getPlanetRotation(planet.data);
+
+            //计算x，y坐标
+            var x = Math.sin(r / 180 * Math.PI ) * planet.data.pr;
+            var y = Math.cos(r / 180 * Math.PI ) * planet.data.pr;
+            node.x = x;
+            node.y = y;
         }
     },
 

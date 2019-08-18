@@ -12,6 +12,8 @@ var BaseScene = cc.Class({
         canvas:{ default:null, visible:false },
         //是否在加载layer
         locastate:{ default:false, visible:false },
+
+        camera:{ default:null, visible:false },
     },
 
     //layer参数队列 由于layer是异步加载 所以请求参数需要进行缓存
@@ -26,6 +28,8 @@ var BaseScene = cc.Class({
     start () {
         this.canvas = this.node.getComponent(cc.Canvas);
         this.layersNode = new cc.Node('layers');
+
+        this.camera = this.node.getChildByName("Main Camera").getComponent(cc.Camera);
 
         var _widget = this.layersNode.addComponent(cc.Widget);
         _widget.isAlignTop = true;
@@ -42,6 +46,10 @@ var BaseScene = cc.Class({
         this.init();
     },
 
+    getCameraPosV2(){
+        var v2 = cc.v2(this.camera.node.x,this.camera.node.y);
+        return v2;
+    },
     init(){},
 
     // update (dt) {},
