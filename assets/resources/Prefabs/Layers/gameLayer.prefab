@@ -28,7 +28,7 @@
       }
     ],
     "_active": false,
-    "_level": 2,
+    "_level": 1,
     "_components": [
       {
         "__id__": 9
@@ -170,9 +170,9 @@
     "_lineCap": 0,
     "_fillColor": {
       "__type__": "cc.Color",
-      "r": 255,
+      "r": 10,
       "g": 255,
-      "b": 255,
+      "b": 0,
       "a": 255
     },
     "_miterLimit": 10,

@@ -24,13 +24,12 @@ cc.Class({
         //当前视窗锁定的星球
         lockPlanet : { default: null, visible:false },
     },
-
+    
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {},
 
     start () {
-
         this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
             this.TouchStartEvent(event);
         }, this);
@@ -70,7 +69,7 @@ cc.Class({
             this.planetList[GameDefine.planetData[i].type] = planet;
         }
         //初始化 界面缩放比例
-        this.planetNodeList.scale = 100;//GameDefine.GAME_SCENE_MAX_SCALE;
+        this.planetNodeList.scale = GameDefine.GAME_SCENE_MAX_SCALE;
 
         this.updatePlanetData(0);
 
@@ -79,11 +78,14 @@ cc.Class({
         var _pos = earthnode.getPosition().add(cc.v2(0,this.planetList["earth"].data.r));
         this.planetNodeList.setPosition(cc.v2(-_pos.x * this.planetNodeList.scale,-_pos.y * this.planetNodeList.scale));
         
+
         //创建发台
-        // var groundnode = cc.instantiate(this.groundPrefab);
-        // earthnode.addChild(groundnode);
-        // groundnode.setPosition(cc.v2(0,this.planetList["earth"].data.r));
-        // groundnode.scale = 0.01;
+        var earthnode = this.planetList["earth"].node;
+        var groundnode = cc.instantiate(this.groundPrefab);
+        earthnode.addChild(groundnode);
+        groundnode.setPosition(cc.v2(0,this.planetList["earth"].data.r));
+        groundnode.scale = 0.0005;
+
 
     },
     update (dt) {
@@ -208,7 +210,7 @@ cc.Class({
 
     //获取行星当前的角度
     getPlanetRotation(planetData){
-        var now = GameCommon.getCurrentTime();
+        var now = GameCommon.getCurrentTime()*10;
         //计算当前年剩余时间
         var t = now % planetData.cycle;
 
